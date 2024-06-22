@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -37,12 +38,24 @@ fun MainScreen(modifier: Modifier = Modifier) {
     // Inspiration from https://medium.com/@khambhaytajaydip/creating-sharedviewmodel-in-android-98ed4aceb7dd
     val viewModel: WordsViewModel = viewModel() // persistence
 
+    val words = viewModel.words.observeAsState().value
+    // Add to gradle file
+    // https://tigeroakes.com/posts/mutablestateof-list-vs-mutablestatelistof/
+
     NavHost(navController = navController, startDestination = NavRoutes.Home.route) {
         composable(NavRoutes.Home.route) {
-            Home(modifier = modifier, navController = navController, viewModel = viewModel)
+            Home(modifier = modifier,
+                words = words,
+                onAdd = { word -> viewModel.add(word) },
+                onRemove = { word -> viewModel.remove(word) },
+                onClear = { viewModel.clear() },
+                onNavigate = { navController.navigate(NavRoutes.Show.route) })
         }
         composable(NavRoutes.Show.route) {
-            Show(modifier = modifier, navController = navController, viewModel = viewModel)
+            Show(modifier = modifier,
+                words = words,
+                onRemove = { word -> viewModel.remove(word) },
+                onNavigate = { navController.popBackStack() })
         }
     }
 }

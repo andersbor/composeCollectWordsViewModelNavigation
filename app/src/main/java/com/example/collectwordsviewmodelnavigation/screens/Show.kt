@@ -9,7 +9,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,20 +17,44 @@ import com.example.collectwordsviewmodelnavigation.WordsViewModel
 
 @Composable
 fun Show(
-    navController: NavHostController,
+ /*   navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: WordsViewModel = viewModel()
 ) {
-    val words = viewModel.words.observeAsState()
+    ShowWords(words = viewModel.words.value,
+        modifier = modifier,
+        onRemove = { word -> viewModel.remove(word) },
+        onNavigate = { navController.popBackStack() }
+    )
+}
+
+@Composable
+fun ShowWords(*/
+    words: List<String>?,
+    modifier: Modifier = Modifier,
+    onRemove: (String) -> Unit = { },
+    onNavigate: () -> Unit = { null },
+) {
+    //val words: State<List<String>?> = viewModel.words.observeAsState()
     Column(modifier = modifier) {
         Text(text = "Words", style = MaterialTheme.typography.headlineLarge)
-        Button(onClick = { navController.popBackStack() }) {
+        Button(onClick = { onNavigate() }) {
             Text("Go back")
         }
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(words.value ?: emptyList()) { wo ->
-                Text(wo, modifier = Modifier.clickable { viewModel.remove(wo) })
+        if (words.isNullOrEmpty()) {
+            Text("No words")
+        } else {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(words) { word ->
+                    Text(word, modifier = Modifier.clickable { onRemove(word) })
+                }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ShowPreview() {
+    Show(words = listOf("Hello", "World"))
 }
