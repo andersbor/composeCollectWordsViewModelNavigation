@@ -37,7 +37,6 @@ fun ShowWords(*/
 ) {
     //val words: State<List<String>?> = viewModel.words.observeAsState()
     Column(modifier = modifier) {
-        Text(text = "Words", style = MaterialTheme.typography.headlineLarge)
         Button(onClick = { onNavigate() }) {
             Text("Go back")
         }

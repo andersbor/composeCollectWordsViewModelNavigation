@@ -72,4 +72,5 @@ dependencies {
 
     //implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.8") // observeAsState
 }

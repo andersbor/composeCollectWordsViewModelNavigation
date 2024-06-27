@@ -41,7 +41,6 @@ fun Home(
     var showList by remember { mutableStateOf(true) }
 
     Column(modifier = modifier) {
-        Text(text = "Collect words", style = MaterialTheme.typography.headlineLarge)
         OutlinedTextField(
             value = word,
             onValueChange = { word = it },
